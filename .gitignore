@@ -1,0 +1,10 @@
+.*.gz
+*.gz
+conflocal.py
+*.pyc
+tx*
+.*.swp
+*.xml
+*.temp
+*.test
+nohup.out
