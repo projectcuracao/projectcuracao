@@ -40,5 +40,8 @@ except ImportError:
 print("conf.notifyAddress", conf.notifyAddress)
 print("conf.fromAddress", conf.fromAddress)
 
-util.sendEmail("test", "hello from ProjectCuracao", "Test from Pi", conf.notifyAddress, conf.fromAddress, "/home/pi/RasPiConnectServer/static/picamera.jpg");
+myIP = util.track_ip()
+
+
+util.sendEmail("test", "hello from ProjectCuracao\n"+str(myIP), "Test from Pi", conf.notifyAddress, conf.fromAddress, "/home/pi/RasPiConnectServer/static/picamera.jpg");
 

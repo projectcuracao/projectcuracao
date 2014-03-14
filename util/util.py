@@ -7,6 +7,8 @@
 import time
 import sys
 import os
+import httplib
+import json
 
 sys.path.append('/home/pi/ProjectCuracao/main/config')
 sys.path.append('/home/pi/ProjectCuracao/main/hardware')
@@ -277,15 +279,41 @@ def sendEmail(source, message, subject, toaddress, fromaddress, filename):
 
 
 
-def rebootPi():
+def rebootPi(why):
+   sendEmail("test", "ProjectCuracao Pi reboot\n" + why, "The Raspberry Pi is rebooting.", conf.notifyAddress,  conf.fromAddress, "");
    # shut the shutter on camera
    hardwareactions.closeshutter();
    sys.stdout.flush()
    os.system("sudo reboot")
 
-def shutdownPi():
+def shutdownPi(why):
+
+   sendEmail("test", "ProjectCuracao Pi shutdown\n" + why, "The Raspberry Pi is shutting down.", conf.notifyAddress,  conf.fromAddress, "");
    # shut the shutter on camera
    hardwareactions.closeshutter();
    sys.stdout.flush()
    os.system("sudo shutdown -h now")
 
+
+def track_ip():
+   """
+   Returns Dict with the following keys:
+   - ip
+   - latlong
+   - country
+   - city
+   - user-agent
+   """
+
+   conn = httplib.HTTPConnection("www.trackip.net")
+   conn.request("GET", "/ip?json")
+   resp = conn.getresponse()
+   print resp.status, resp.reason
+
+   if resp.status == 200:
+       ip = json.loads(resp.read())
+   else:
+       print 'Connection Error: %s' % resp.reason
+
+   conn.close()
+   return ip

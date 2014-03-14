@@ -79,7 +79,7 @@ def handleInterrupt(reason):
 
 	if (reason == globalvars.SHUTDOWN):
     		pclogging.log(pclogging.CRITICAL, __name__, "Project Curacao Pi Shutdown")
-		util.shutdownPi()
+		util.shutdownPi("Interrupt from BatteryWatchdog")
 		return
 
 	if (reason == globalvars.GETLOG):
@@ -100,7 +100,7 @@ def handleInterrupt(reason):
 
 	if (reason == globalvars.REBOOT):
     		pclogging.log(pclogging.CRITICAL, __name__, "Project Curacao Pi Reboot")
-		util.rebootPi()
+		util.rebootPi("Interrupt from BatteryWatchdog")
 		return
 
 
@@ -122,7 +122,10 @@ if __name__ == '__main__':
     # log system startup
  
     pclogging.log(pclogging.INFO, __name__, "Project Curacao Startup")
-    util.sendEmail("test", "ProjectCuracao Pi Startup", "The Raspberry Pi has rebooted.", conf.notifyAddress,  conf.fromAddress, "");
+
+    myIP = util.track_ip()
+    util.sendEmail("test", "ProjectCuracao Pi Startup\n" + str(myIP), "The Raspberry Pi has rebooted.", conf.notifyAddress,  conf.fromAddress, "");
+
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)	
     GPIO.setup(7, GPIO.OUT, pull_up_down=GPIO.PUD_DOWN)
