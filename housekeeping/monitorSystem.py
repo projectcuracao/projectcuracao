@@ -52,67 +52,10 @@ def  monitorSystem(source, delay):
 
 	# grab current latest conditions.
 
-	# read inside temp/hum live
-
 	# grab last outside temp from database
 
 	
 	
-	# now read in all the required data
-	# Inside Temperature
-	# Barometric Pressure
-
-        # Initialise the BMP085 and use STANDARD mode (default value)
-        # bmp = BMP085(0x77, debug=True)
-        # bmp = BMP085(0x77)
-
-        # To specify a different operating mode, uncomment one of the following:
-        # bmp = BMP085(0x77, 0)  # ULTRALOWPOWER Mode
-        # bmp = BMP085(0x77, 1)  # STANDARD Mode
-        # bmp = BMP085(0x77, 2)  # HIRES Mode
-        bmp = BMP085(0x77, 3)  # ULTRAHIRES Mode
-
-
-
-	insidetemperature =-1000.0
-        try:
-               insidetemperature = bmp.readTemperature()
-
-        except IOError as e:
-               print "I/O error({0}): {1}".format(e.errno, e.strerror)
-        except:
-               print "Unexpected error:", sys.exc_info()[0]
-               raise
-
-
-	# Inside Humidity
-
-        insidehumidity = -1000.0 # bad data
-        try:
-                maxCount = 20
-                count = 0
-                while (count < maxCount):
-                    output = subprocess.check_output(["/home/pi/ProjectCuracao/main/hardware/Adafruit_DHT_MOD", "22", "23"]);
-                    print "count=", count
-                    print output
-                    # search for humidity printout
-                    matches = re.search("Hum =\s+([0-9.]+)", output)
-
-                    if (not matches):
-                          count = count + 1
-                          time.sleep(3.0)
-                          continue
-                    insidehumidity = float(matches.group(1))
-                    count = maxCount
-
-
-
-        except IOError as e:
-                 print "I/O error({0}): {1}".format(e.errno, e.strerror)
-        except:
-                 print "Unexpected error:", sys.exc_info()[0]
-                 raise
-
 
 	# now get the latest outside information
 
@@ -144,6 +87,35 @@ def  monitorSystem(source, delay):
        		del cursor
        		del db
 
+
+	# get insidetemperature and inside humidity
+	try:
+      		print("trying database")
+       		db = mdb.connect('localhost', 'root', 'bleh0101', 'ProjectCuracao');
+		
+       		cursor = db.cursor()
+
+
+		query = "SELECT InsideTemperature, InsideHumidity FROM environmentaldata ORDER BY ID DESC LIMIT 1"
+              	cursor.execute(query)
+               	result = cursor.fetchone()
+		print result
+		insidetemperature = result[0]
+		insidehumidity = result[1]
+
+
+        except mdb.Error, e:
+		
+        	print "Error %d: %s" % (e.args[0],e.args[1])
+
+        finally:
+		
+        	cursor.close()
+               	db.close()
+	
+       		del cursor
+       		del db
+
         ina44 = INA219(0x44)
         solarvoltage = ina44.getBusVoltage_V()
 
@@ -158,8 +130,6 @@ def  monitorSystem(source, delay):
 	print "   solarvoltage = \t\t%3.2f" %  solarvoltage
 	
 	
-	print "WARNING:solar overidden to 6.0 for testing"
-	solarvoltage = 6.0
 
 	# now do monitor brain calculations
 

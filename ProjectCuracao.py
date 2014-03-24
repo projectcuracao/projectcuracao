@@ -44,6 +44,8 @@ import powersupplyvoltagesgraph
 import environdatacollect
 import watchdogdatacollect
 
+import monitorSystem
+
 import doallgraphs
 import hardwareactions
 import useCamera
@@ -152,7 +154,8 @@ if __name__ == '__main__':
     job = scheduler.add_cron_job(environdatacollect.environdatacollect, minute="*/15", args=['main', 10])    
     job = scheduler.add_cron_job(systemstatistics.systemstatistics15minutes, minute="*/15", args=['main', 50])    
 
-
+    # start system monitoring
+    job = scheduler.add_cron_job(monitorSystem.monitorSystem, minute="3,8,13,18,23,28,33,38,43,49,53,57", args=['main', 0])    
 
     
     job = scheduler.add_cron_job(doallgraphs.doallgraphs, minute="*/15", args=['main',10,70])    
