@@ -125,6 +125,7 @@ if __name__ == '__main__':
 
     myIP = util.track_ip()
     util.sendEmail("test", "ProjectCuracao Pi Startup\n" + str(myIP), "The Raspberry Pi has rebooted.", conf.notifyAddress,  conf.fromAddress, "");
+    util.sendEmail("test", "ProjectCuracao Pi Startup\n" + str(myIP), "The Raspberry Pi has rebooted.", conf.secondaryNotifyAddress,  conf.fromAddress, "");
 
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)	

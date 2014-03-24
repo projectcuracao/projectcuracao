@@ -72,6 +72,7 @@ def convertArduinoEntry01ToText(entry0,entry1):
 		entryName ="LOGPiPower: %s" % entry1
 	if (entry0 == 6):
 		# LOGPiInterrupt has reason as entryData1
+		myentry1 = entry1
 		if (entry1 == "0"):
 			myentry1 = "NOINTERRUPT" 
 		if (entry1 == "1"):

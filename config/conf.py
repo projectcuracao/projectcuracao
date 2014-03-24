@@ -10,7 +10,7 @@ mailPassword = "YourPassword"
 databasePassword = "databasePassword"
 
 notifyAddress = "YourName@YourDomain.com"
-
+secondaryNotifyAddress = "YourName@YourDomain.com"
 fromAddress = "YourFrom@YourFromDomain.com"
 
 

@@ -51,7 +51,7 @@ def  readTime(source, delay):
 	# Send the GD (Get Data) Command
 	ser = serial.Serial('/dev/ttyAMA0', 9600, timeout=1)
 	#ser.open()
-	time.sleep(7.0)
+	time.sleep(3.0)
 
 	# send the first "are you there? command - RD - return from Arduino OK"
 		
