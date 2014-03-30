@@ -188,7 +188,7 @@ def  monitorSystem(source, delay):
 		#if temp inside is cooler than outside, turn fan off
 		if ((insidetemperature < conf.FAN_OFF_TEMPERATURE) and (insidehumidity < conf.FAN_OFF_HUMIDITY)):
 			hardwareactions.setfan(False)	
-			pclogging.log(pclogging.INFO, __name__, "fanOFF insidehumid< FAN_ON_TEMPERATURE and insidehum < FAN_OFF_HUMIDITY")
+			pclogging.log(pclogging.INFO, __name__, "fanOFF insidetemp< FAN_ON_TEMPERATURE and insidehum < FAN_OFF_HUMIDITY")
 			message = "Fan turning OFF:  State: ot:%3.2f it:%3.2f oh:%3.2f ih:%3.2f sv:%3.2f" % (outsidetemperature, insidetemperature, outsidehumidity, insidehumidity, solarvoltage)
 			util.sendEmail("test", message,"ProjectCuracao Fan OFF(TH)", conf.notifyAddress,  conf.fromAddress, "");
 			print "monitorSystems Turning FAN OFF" 
