@@ -281,6 +281,12 @@ def sendEmail(source, message, subject, toaddress, fromaddress, filename):
 
 
 def rebootPi(why):
+   # Check for user imports
+   try:
+  	import conflocal as conf
+   except ImportError:
+  	import conf
+
    sendEmail("test", "ProjectCuracao Pi reboot\n" + why, "The Raspberry Pi is rebooting.", conf.notifyAddress,  conf.fromAddress, "");
    # shut the shutter on camera
    hardwareactions.closeshutter();
@@ -288,6 +294,12 @@ def rebootPi(why):
    os.system("sudo reboot")
 
 def shutdownPi(why):
+
+   # Check for user imports
+   try:
+  	import conflocal as conf
+   except ImportError:
+  	import conf
 
    sendEmail("test", "ProjectCuracao Pi shutdown\n" + why, "The Raspberry Pi is shutting down.", conf.notifyAddress,  conf.fromAddress, "");
    # shut the shutter on camera

@@ -125,9 +125,14 @@ if __name__ == '__main__':
  
     pclogging.log(pclogging.INFO, __name__, "Project Curacao Startup")
 
-    myIP = util.track_ip()
-    util.sendEmail("test", "ProjectCuracao Pi Startup\n" + str(myIP), "The Raspberry Pi has rebooted.", conf.notifyAddress,  conf.fromAddress, "");
-    util.sendEmail("test", "ProjectCuracao Pi Startup\n" + str(myIP), "The Raspberry Pi has rebooted.", conf.secondaryNotifyAddress,  conf.fromAddress, "");
+    try:
+    	myIP = util.track_ip()
+    	util.sendEmail("test", "ProjectCuracao Pi Startup\n" + str(myIP), "The Raspberry Pi has rebooted.", conf.notifyAddress,  conf.fromAddress, "");
+    	util.sendEmail("test", "ProjectCuracao Pi Startup\n" + str(myIP), "The Raspberry Pi has rebooted.", conf.secondaryNotifyAddress,  conf.fromAddress, "");
+
+    except:
+    	pclogging.log(pclogging.INFO, __name__, "Email / IP fetch failed (Internet down)")
+
 
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BOARD)	
