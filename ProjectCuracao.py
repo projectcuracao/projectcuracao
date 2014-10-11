@@ -43,6 +43,7 @@ import systemstatistics
 import powersupplyvoltagesgraph 
 import environdatacollect
 import watchdogdatacollect
+import watchdogdatacollect
 
 import monitorSystem
 
@@ -55,7 +56,9 @@ import sendPictureEmail
 import recieveInterruptFromBW 
 import sendWatchDogTimer
 import getTime
+import getFramArduinoLog
 
+import selectSolar
 import globalvars
 
 
@@ -159,10 +162,14 @@ if __name__ == '__main__':
     job = scheduler.add_cron_job(environdatacollect.environdatacollect, minute="*/15", args=['main', 10])    
     job = scheduler.add_cron_job(systemstatistics.systemstatistics15minutes, minute="*/15", args=['main', 50])    
 
+    # new task for the Fram Arduino Weather Log
+    job = scheduler.add_cron_job(getFramArduinoLog.getFramArduinoLog, minute="34", args=['main', 10])    
+
     # start system monitoring
     job = scheduler.add_cron_job(monitorSystem.monitorSystem, minute="3,8,13,18,23,28,33,38,43,49,53,57", args=['main', 0])    
 
-    
+   
+    # do all graphs
     job = scheduler.add_cron_job(doallgraphs.doallgraphs, minute="*/15", args=['main',10,70])    
 
 
@@ -170,6 +177,10 @@ if __name__ == '__main__':
     job = scheduler.add_cron_job(useCamera.takeSinglePicture, hour="*", args=['main',50])    
     # send daily picture
     job = scheduler.add_cron_job(sendPictureEmail.sendPictureEmail, hour="22",minute="20", args=['main',0])    
+
+    # restart solar at 22:02 because there is no turbine left!
+    # job = scheduler.add_cron_job(selectSolar.selectSolar, hour="22",minute="02", args=['main',0])
+
 
 
     sys.stdout.write('Press Ctrl+C to exit\n')
