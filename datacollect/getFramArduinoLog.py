@@ -82,7 +82,7 @@ def  getFramArduinoLog(source, delay):
 		print "bad response from RD"
 		pclogging.log(pclogging.ERROR, __name__, "RD failed from Pi to BatteryWatchDog")
                 ser.close()
-		return
+		return 0
 	# Read the value
 
 
@@ -96,6 +96,7 @@ def  getFramArduinoLog(source, delay):
 	    	countEntry = 0
 
 	print("countEntry=", countEntry)
+	pclogging.log(pclogging.INFO, __name__, "FRAM records read: %i " % countEntry)
 	
 	if (countEntry > 0):
 		# read all unread entries
@@ -161,7 +162,7 @@ def  getFramArduinoLog(source, delay):
         			response = util.sendCommandAndRecieve(ser, "GB")
 				print("response=", response);
 				ser.close()
-				return
+				return 0
 	
 
 	# say goodby  
@@ -169,3 +170,5 @@ def  getFramArduinoLog(source, delay):
 	print("response=", response);
 
 	ser.close()
+
+	return countEntry

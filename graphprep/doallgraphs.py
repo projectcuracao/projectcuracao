@@ -27,6 +27,9 @@ import environcolor
 import batterywatchdogcurrentgraph 
 import batterywatchdogvoltagegraph
 import powersupplyvoltagesgraph 
+import windpowergraph 
+import raingraph 
+
 
 
 
@@ -51,5 +54,7 @@ def doallgraphs(location,days, maindelay):
 	batterywatchdogcurrentgraph.batterywatchdogcurrentgraph(location,days,delay)    
 	batterywatchdogvoltagegraph.batterywatchdogvoltagegraph(location,days,delay)    
 	solarwindgraph.solarwindgraph(location,days,delay)    
+	windpowergraph.windpowergraph(location,days,delay)    
+	raingraph.raingraph(location,days,delay)    
 
 

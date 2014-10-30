@@ -1,6 +1,6 @@
 # Battery Watchdog Data collection events
 # filename: watchdogdatacollect.py
-# Version 1.5 01/10/14
+# Version 1.6 10/15/14
 #
 # contains event routines for data collection from the battery watchdog arduino
 #
@@ -10,6 +10,9 @@ import sys
 import time
 import RPi.GPIO as GPIO
 import serial
+
+
+from Subfact_ina219 import INA219
 
 import MySQLdb as mdb
 sys.path.append('./pclogging')
@@ -220,6 +223,15 @@ def  watchdogdatacollect(source, delay):
 	
 	print("ArInputCurrent =", ArInputCurrent)
 
+	ina44 = INA219(0x44)
+        current44 = ina44.getCurrent_mA() # solar or wind on pi
+
+
+	
+	
+	PiSolarWindCurrent = current44 
+	print ("PiSolarWindCurrent", PiSolarWindCurrent)
+
 
 	# say goodby  
         response = util.sendCommandAndRecieve(ser, "GB")
@@ -236,7 +248,7 @@ def  watchdogdatacollect(source, delay):
     		cur = con.cursor()
 		print "before query"
 
-		query = 'INSERT INTO batterywatchdogdata(TimeStamp, ArInputCurrent, ArInputVoltage, BatteryOutputCurrent, BatteryOutputVoltage, SolarOutputCurrent, SolarOutputVoltage, BatteryTemperature, PowerEfficiency, LastReboot, OutsideTemperature, OutsideHumidity, FreeMemory, UnregulatedWindVoltage, RegulatedWindVoltage, SolarWind,ArduinoPiBatteryVoltage) VALUES(UTC_TIMESTAMP(), %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f,%.3f,%s, %.3f, %.3f, %i, %.3f, %.3f, %i, %.3f)' % (ArInputCurrent, ArInputVoltage, BatteryCurrent, BatteryVoltage, SolarCellCurrent, SolarCellVoltage, BatteryTemperature, powerEfficiency, LastReboot, OutsideTemperature, OutsideHumidity, FreeMemory, UnregulatedWindVoltage, RegulatedWindVoltage, SolarWind, ArduinoPiBatteryVoltage)
+		query = 'INSERT INTO batterywatchdogdata(TimeStamp, ArInputCurrent, ArInputVoltage, BatteryOutputCurrent, BatteryOutputVoltage, SolarOutputCurrent, SolarOutputVoltage, BatteryTemperature, PowerEfficiency, LastReboot, OutsideTemperature, OutsideHumidity, FreeMemory, UnregulatedWindVoltage, RegulatedWindVoltage, SolarWind,ArduinoPiBatteryVoltage,PiSolarWindCurrent) VALUES(UTC_TIMESTAMP(), %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f,%.3f,%s, %.3f, %.3f, %i, %.3f, %.3f, %i, %.3f, %.3f)' % (ArInputCurrent, ArInputVoltage, BatteryCurrent, BatteryVoltage, SolarCellCurrent, SolarCellVoltage, BatteryTemperature, powerEfficiency, LastReboot, OutsideTemperature, OutsideHumidity, FreeMemory, UnregulatedWindVoltage, RegulatedWindVoltage, SolarWind, ArduinoPiBatteryVoltage, PiSolarWindCurrent)
 		print("query=%s" % query)
 
 		cur.execute(query)
